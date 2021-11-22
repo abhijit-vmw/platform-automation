@@ -48,3 +48,7 @@ git_private_key: |
   hv2VbSN+WTfxZJCqfONg+pYIc6lKICguXgTmxmIZaZmOKoj7tkKHB5Xg1SnwRYzi1Lut/9
   o78t/VM26P8AAAATYWthbmdhbGVAdm13YXJlLmNvbQ==
   -----END OPENSSH PRIVATE KEY-----
+  
+repo:
+  pipelines:
+    pivnet_token: 351b3fefc32c46679c30ae1af232a0ce-r
