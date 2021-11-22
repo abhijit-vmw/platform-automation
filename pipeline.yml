@@ -10,9 +10,16 @@ resources:
   type: pivnet
   source:
     product_slug: platform-automation
-    api_token: ((pivnet_token))
+    api_token: ((repo.pipelines.pivnet-token))
+- name: config
+  type: git
+  source:
+    uri: git@github.com:abhijit-vmw/platform-automation.git
+    private_key: ((git_private_key))
+    branch: main
 jobs:
-- name: test
+- name: install-ops-manager
+  serial: true
   plan:
     - get: platform-automation-image
       resource: platform-automation
@@ -24,6 +31,18 @@ jobs:
       params:
         globs: ["*tasks*.zip"]
         unpack: true
-    - task: test
+    - get: config
+    - task: prepare-tasks-with-secrets
       image: platform-automation-image
-      file: platform-automation-tasks/tasks/test.yml
+      file: platform-automation-tasks/tasks/prepare-tasks-with-secrets.yml
+      input_mapping:
+        tasks: platform-automation-tasks
+      output_mapping:
+        tasks: platform-automation-tasks
+      params:
+        CONFIG_PATHS: config
+    - task: download-product        
+      image: platform-automation-image
+      file: platform-automation-tasks/tasks/download-product.yml
+      params:
+        CONFIG_FILE: download-ops-manager.yml
